@@ -1,36 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SkillPath — Master Your Domain</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- ═══ AUTH SCREEN ═══ -->
 <div id="auth-overlay" class="auth-overlay active">
-  <div class="auth-split">
-    <div class="auth-brand">
-      <div class="brand-wordmark">SkillPath</div>
-      <div class="brand-tagline">Structured learning<br/>for the modern developer.</div>
-      <div class="brand-stats">
-        <div class="bstat"><span class="bstat-num">12</span><span class="bstat-lbl">Domains</span></div>
-        <div class="bstat-divider"></div>
-        <div class="bstat"><span class="bstat-num">240+</span><span class="bstat-lbl">Courses</span></div>
-        <div class="bstat-divider"></div>
-        <div class="bstat"><span class="bstat-num">50k</span><span class="bstat-lbl">Learners</span></div>
+  <div class="auth-bg">
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+    <div class="auth-orb auth-orb-3"></div>
+    <div class="auth-orb auth-orb-4"></div>
+  </div>
+  <div class="auth-container">
+    <div class="auth-brand-col">
+      <div class="auth-brand-logo">SkillPath</div>
+      <div class="auth-brand-headline">Learn.<br/><span class="hl-pink">Build.</span><br/><span class="hl-cyan">Succeed.</span></div>
+      <p class="auth-brand-sub">Structured roadmaps for every modern developer. Go from zero to job-ready — fast.</p>
+      <div class="auth-brand-pills">
+        <span class="pill pill-pink">12 Domains</span>
+        <span class="pill pill-cyan">240+ Courses</span>
+        <span class="pill pill-yellow">50k Learners</span>
       </div>
     </div>
-    <div class="auth-panel">
-      <div class="auth-box">
+    <div class="auth-form-col">
+      <div class="auth-card">
+        <!-- Login -->
         <div id="login-form" class="auth-form active">
-          <div class="auth-form-header">
-            <h2>Welcome back</h2>
-            <p class="auth-sub">Continue where you left off.</p>
-          </div>
+          <h2 class="auth-title">Welcome back</h2>
+          <p class="auth-sub">Pick up right where you left off.</p>
           <div class="field-group">
             <label>Username</label>
             <input type="text" id="login-username" placeholder="Your username" />
@@ -41,20 +46,18 @@
           </div>
           <div id="login-error" class="auth-error"></div>
           <button class="btn-primary full" onclick="handleLogin()">Sign in</button>
-          <p class="auth-switch">No account? <a onclick="toggleAuth('signup')">Create one free</a></p>
+          <p class="auth-switch">No account? <a onclick="toggleAuth('signup')">Sign up free</a></p>
         </div>
-
+        <!-- Signup -->
         <div id="signup-form" class="auth-form">
-          <div class="auth-form-header">
-            <h2>Create account</h2>
-            <p class="auth-sub">Start your learning journey today.</p>
-          </div>
+          <h2 class="auth-title">Create account</h2>
+          <p class="auth-sub">Start your journey today.</p>
           <div class="field-group">
             <label>Username</label>
             <input type="text" id="signup-username" placeholder="Choose a username" />
           </div>
           <div class="field-group">
-            <label>Email address</label>
+            <label>Email</label>
             <input type="email" id="signup-email" placeholder="you@example.com" />
           </div>
           <div class="field-group">
@@ -70,254 +73,236 @@
   </div>
 </div>
 
-<!-- APP SHELL -->
+<!-- ═══ APP SHELL ═══ -->
 <div id="app" class="app hidden">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo">SkillPath</div>
-      <button class="sidebar-close" onclick="toggleSidebar()">&#x2715;</button>
-    </div>
-
-    <div class="sidebar-user">
-      <div class="avatar" id="sb-avatar">A</div>
-      <div class="sb-user-info">
-        <div class="sb-username" id="sb-username">Username</div>
-        <div class="sb-level"><span id="sb-points">0</span> points</div>
+  <!-- THREE-DOT MENU -->
+  <div class="dots-menu-wrap">
+    <button class="dots-btn" id="dots-btn" onclick="toggleDotsMenu()" title="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="dots-dropdown" id="dots-dropdown">
+      <div class="dots-user-header">
+        <div class="dots-avatar" id="dots-avatar">A</div>
+        <div>
+          <div class="dots-uname" id="dots-uname">Username</div>
+          <div class="dots-pts" id="dots-pts">0 points</div>
+        </div>
       </div>
-    </div>
-
-    <nav class="sidebar-nav">
-      <a class="nav-item active" onclick="navigate('landing')" data-page="landing">
-        <span class="nav-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </span>
+      <div class="dots-divider"></div>
+      <a class="dots-item" onclick="navigate('landing');closeDotsMenu()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Home
       </a>
-      <a class="nav-item" onclick="navigate('dashboard')" data-page="dashboard">
-        <span class="nav-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        </span>
+      <a class="dots-item" onclick="navigate('dashboard');closeDotsMenu()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Dashboard
       </a>
-      <a class="nav-item" onclick="navigate('domain')" data-page="domain">
-        <span class="nav-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
-        </span>
+      <a class="dots-item" onclick="navigate('domain');closeDotsMenu()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
         Roadmap
       </a>
-      <a class="nav-item" onclick="navigate('community')" data-page="community">
-        <span class="nav-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        </span>
+      <a class="dots-item" onclick="navigate('community');closeDotsMenu()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         Community
       </a>
-      <a class="nav-item" onclick="navigate('career')" data-page="career">
-        <span class="nav-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-        </span>
+      <a class="dots-item" onclick="navigate('career');closeDotsMenu()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
         Career Insights
       </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <span id="theme-icon">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </span>
-        <span id="theme-label">Light Mode</span>
-      </button>
-      <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+      <div class="dots-divider"></div>
+      <a class="dots-item dots-item-danger" onclick="handleLogout()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign out
+      </a>
     </div>
-  </aside>
-
-  <!-- MAIN WRAP -->
-  <div class="main-wrap">
-
-    <!-- TOP BAR -->
-    <header class="topbar">
-      <button class="menu-btn" onclick="toggleSidebar()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-      <div class="search-wrap">
-        <span class="search-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </span>
-        <input type="text" id="search-input" placeholder="Search courses, domains... (Ctrl+K)" oninput="handleSearch()" />
-        <div id="search-results" class="search-dropdown hidden"></div>
-      </div>
-      <div class="topbar-right">
-        <div class="streak-badge"><span id="topbar-streak">0</span> day streak</div>
-        <div class="user-chip" id="topbar-user">User</div>
-      </div>
-    </header>
-
-    <!-- PAGES -->
-    <main class="page-container">
-
-      <!-- LANDING -->
-      <section id="page-landing" class="page active">
-
-        <div class="hero">
-          <div class="hero-eyebrow">New &mdash; AI Roadmap 2025</div>
-          <h1 class="hero-title">Master your domain<br/><em>with structured learning.</em></h1>
-          <p class="hero-sub">Curated roadmaps built by practitioners. AI-powered recommendations. Gamified progress tracking and real career outcomes.</p>
-          <div class="hero-cta">
-            <button class="btn-primary" onclick="navigate('domain')">Start learning</button>
-            <button class="btn-ghost" onclick="scrollToSection('#trending-section')">Browse domains</button>
-          </div>
-          <div class="hero-stats">
-            <div class="stat"><strong>12+</strong><span>Domains</span></div>
-            <div class="stat-line"></div>
-            <div class="stat"><strong>240+</strong><span>Courses</span></div>
-            <div class="stat-line"></div>
-            <div class="stat"><strong>50k+</strong><span>Learners</span></div>
-          </div>
-        </div>
-
-        <div id="trending-section" class="section">
-          <div class="section-header">
-            <h2>Trending Domains</h2>
-            <span class="section-tag">Updated weekly</span>
-          </div>
-          <div class="domain-grid" id="domain-cards"></div>
-        </div>
-
-        <div class="section how-it-works">
-          <div class="section-header"><h2>How SkillPath works</h2></div>
-          <div class="steps-grid">
-            <div class="step-card">
-              <div class="step-num">01</div>
-              <h3>Choose a Domain</h3>
-              <p>Pick from 12 structured learning paths curated by industry experts and practitioners.</p>
-            </div>
-            <div class="step-card">
-              <div class="step-num">02</div>
-              <h3>Follow the Roadmap</h3>
-              <p>Progress methodically from Beginner through Intermediate to Advanced — step by step.</p>
-            </div>
-            <div class="step-card">
-              <div class="step-num">03</div>
-              <h3>Earn and Level Up</h3>
-              <p>Collect points, unlock badges, maintain your streak, and climb the leaderboard.</p>
-            </div>
-            <div class="step-card">
-              <div class="step-num">04</div>
-              <h3>Get Career Ready</h3>
-              <p>Discover market salaries, job demand signals, and the exact skills employers seek.</p>
-            </div>
-          </div>
-        </div>
-
-        <footer class="site-footer">
-          <div class="footer-inner">
-            <div class="footer-brand">SkillPath</div>
-            <div class="footer-links">
-              <a href="#">About</a>
-              <a href="#">Blog</a>
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
-            </div>
-            <div class="footer-social">
-              <a href="#">Twitter</a>
-              <a href="#">GitHub</a>
-              <a href="#">LinkedIn</a>
-              <a href="#">Discord</a>
-            </div>
-          </div>
-          <p class="footer-copy">&copy; 2025 SkillPath. Built for learners, by learners.</p>
-        </footer>
-      </section>
-
-      <!-- DASHBOARD -->
-      <section id="page-dashboard" class="page">
-        <div class="page-title">Dashboard</div>
-        <div class="dash-grid">
-          <div class="glass-card profile-card">
-            <div class="profile-avatar" id="dash-avatar">A</div>
-            <div class="profile-info">
-              <h3 id="dash-username">Username</h3>
-              <p id="dash-email">email@email.com</p>
-              <div class="badges-row" id="badge-row"></div>
-            </div>
-          </div>
-          <div class="glass-card stat-card">
-            <div class="stat-label">Total Points</div>
-            <div class="stat-val" id="dash-points">0</div>
-          </div>
-          <div class="glass-card stat-card">
-            <div class="stat-label">Day Streak</div>
-            <div class="stat-val" id="dash-streak">0</div>
-          </div>
-          <div class="glass-card stat-card">
-            <div class="stat-label">Completed</div>
-            <div class="stat-val" id="dash-completed">0</div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-header"><h2>Domain Progress</h2></div>
-          <div class="progress-list" id="progress-list"></div>
-        </div>
-
-        <div class="section">
-          <div class="section-header"><h2>Recommended for You</h2></div>
-          <div class="rec-grid" id="rec-grid"></div>
-        </div>
-      </section>
-
-      <!-- ROADMAP -->
-      <section id="page-domain" class="page">
-        <div class="domain-topbar">
-          <div class="page-title">Learning Roadmap</div>
-          <div class="domain-selector">
-            <label>Domain</label>
-            <select id="domain-select" onchange="loadRoadmap()">
-              <option value="webdev">Web Development</option>
-              <option value="ai">Artificial Intelligence</option>
-              <option value="cybersec">Cybersecurity</option>
-              <option value="datascience">Data Science</option>
-              <option value="web3">Web3 / Blockchain</option>
-              <option value="devops">DevOps</option>
-            </select>
-          </div>
-        </div>
-        <div class="roadmap-legend">
-          <span class="leg beg">Beginner</span>
-          <span class="leg int">Intermediate</span>
-          <span class="leg adv">Advanced</span>
-        </div>
-        <div id="roadmap-container"></div>
-      </section>
-
-      <!-- COMMUNITY -->
-      <section id="page-community" class="page">
-        <div class="page-title">Community</div>
-        <div class="community-grid">
-          <div class="glass-card leaderboard-card">
-            <h3>Leaderboard</h3>
-            <div id="leaderboard-list"></div>
-          </div>
-          <div class="glass-card share-card">
-            <h3>Share Progress</h3>
-            <div class="share-preview" id="share-preview"></div>
-            <textarea id="share-msg" placeholder="Share a milestone or thought with the community..." rows="3"></textarea>
-            <button class="btn-primary" onclick="shareProgress()">Post update</button>
-            <div class="community-feed" id="community-feed"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CAREER -->
-      <section id="page-career" class="page">
-        <div class="page-title">Career Insights</div>
-        <p class="page-sub">Explore future-proof careers, market salaries, and required skills.</p>
-        <div class="career-grid" id="career-grid"></div>
-      </section>
-
-    </main>
   </div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">SkillPath</div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <input type="text" id="search-input" placeholder="Search courses, domains... (Ctrl+K)" oninput="handleSearch()" />
+      <div id="search-results" class="search-dropdown hidden"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="streak-badge"><span id="topbar-streak">0</span> day streak</div>
+      <div class="user-chip" id="topbar-user">User</div>
+    </div>
+  </header>
+
+  <!-- NAV TABS -->
+  <nav class="tab-nav">
+    <a class="tab-item active" onclick="navigate('landing')" data-page="landing">Home</a>
+    <a class="tab-item" onclick="navigate('dashboard')" data-page="dashboard">Dashboard</a>
+    <a class="tab-item" onclick="navigate('domain')" data-page="domain">Roadmap</a>
+    <a class="tab-item" onclick="navigate('community')" data-page="community">Community</a>
+    <a class="tab-item" onclick="navigate('career')" data-page="career">Career</a>
+  </nav>
+
+  <!-- PAGES -->
+  <main class="page-container">
+
+    <!-- ══ LANDING ══ -->
+    <section id="page-landing" class="page active">
+
+      <div class="hero">
+        <div class="hero-tag">New — AI Roadmap 2025</div>
+        <h1 class="hero-title">Master your domain<br/><span class="hero-title-accent">with structured learning.</span></h1>
+        <p class="hero-sub">Curated roadmaps built by practitioners. AI-powered recommendations. Gamified progress and real career outcomes.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="navigate('domain')">Start learning</button>
+          <button class="btn-outline" onclick="scrollToSection('#trending-section')">Browse domains</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><span class="hstat-num">12+</span><span class="hstat-lbl">Domains</span></div>
+          <div class="hstat-sep"></div>
+          <div class="hstat"><span class="hstat-num">240+</span><span class="hstat-lbl">Courses</span></div>
+          <div class="hstat-sep"></div>
+          <div class="hstat"><span class="hstat-num">50k+</span><span class="hstat-lbl">Learners</span></div>
+        </div>
+      </div>
+
+      <div id="trending-section" class="section">
+        <div class="section-hdr">
+          <h2 class="section-title">Trending Domains</h2>
+          <span class="section-badge">Updated weekly</span>
+        </div>
+        <div class="domain-grid" id="domain-cards"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-hdr"><h2 class="section-title">How SkillPath works</h2></div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h3>Choose a Domain</h3>
+            <p>Pick from 12 structured learning paths curated by industry experts.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h3>Follow the Roadmap</h3>
+            <p>Progress methodically from Beginner to Intermediate to Advanced.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h3>Earn and Level Up</h3>
+            <p>Collect points, unlock badges, maintain streaks, and climb the board.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">04</div>
+            <h3>Get Career Ready</h3>
+            <p>Discover market salaries, job demand, and the skills employers need.</p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div class="footer-row">
+          <div class="footer-logo">SkillPath</div>
+          <div class="footer-links">
+            <a href="#">About</a><a href="#">Blog</a><a href="#">Privacy</a><a href="#">Terms</a>
+          </div>
+          <div class="footer-links">
+            <a href="#">Twitter</a><a href="#">GitHub</a><a href="#">Discord</a>
+          </div>
+        </div>
+        <p class="footer-copy">&copy; 2025 SkillPath. Built for learners, by learners.</p>
+      </footer>
+    </section>
+
+    <!-- ══ DASHBOARD ══ -->
+    <section id="page-dashboard" class="page">
+      <div class="page-header"><h1 class="page-title">Dashboard</h1></div>
+      <div class="dash-grid">
+        <div class="card profile-card">
+          <div class="profile-av" id="dash-avatar">A</div>
+          <div class="profile-info">
+            <h3 id="dash-username">Username</h3>
+            <p id="dash-email">email@email.com</p>
+            <div class="badges-row" id="badge-row"></div>
+          </div>
+        </div>
+        <div class="card stat-card stat-pink">
+          <div class="stat-lbl">Total Points</div>
+          <div class="stat-val" id="dash-points">0</div>
+        </div>
+        <div class="card stat-card stat-cyan">
+          <div class="stat-lbl">Day Streak</div>
+          <div class="stat-val" id="dash-streak">0</div>
+        </div>
+        <div class="card stat-card stat-yellow">
+          <div class="stat-lbl">Completed</div>
+          <div class="stat-val" id="dash-completed">0</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-hdr"><h2 class="section-title">Domain Progress</h2></div>
+        <div class="progress-list" id="progress-list"></div>
+      </div>
+      <div class="section">
+        <div class="section-hdr"><h2 class="section-title">Recommended for You</h2></div>
+        <div class="rec-grid" id="rec-grid"></div>
+      </div>
+    </section>
+
+    <!-- ══ ROADMAP ══ -->
+    <section id="page-domain" class="page">
+      <div class="page-header domain-topbar">
+        <h1 class="page-title">Learning Roadmap</h1>
+        <div class="domain-selector">
+          <label>Domain</label>
+          <select id="domain-select" onchange="loadRoadmap()">
+            <option value="webdev">Web Development</option>
+            <option value="ai">Artificial Intelligence</option>
+            <option value="cybersec">Cybersecurity</option>
+            <option value="datascience">Data Science</option>
+            <option value="web3">Web3 / Blockchain</option>
+            <option value="devops">DevOps</option>
+          </select>
+        </div>
+      </div>
+      <div class="roadmap-legend">
+        <span class="leg beg">Beginner</span>
+        <span class="leg int">Intermediate</span>
+        <span class="leg adv">Advanced</span>
+      </div>
+      <div id="roadmap-container"></div>
+    </section>
+
+    <!-- ══ COMMUNITY ══ -->
+    <section id="page-community" class="page">
+      <div class="page-header"><h1 class="page-title">Community</h1></div>
+      <div class="community-grid">
+        <div class="card leaderboard-card">
+          <h3 class="card-title">Leaderboard</h3>
+          <div id="leaderboard-list"></div>
+        </div>
+        <div class="card share-card">
+          <h3 class="card-title">Share Progress</h3>
+          <div class="share-preview" id="share-preview"></div>
+          <textarea id="share-msg" placeholder="Share a milestone with the community..." rows="3"></textarea>
+          <button class="btn-primary" onclick="shareProgress()">Post update</button>
+          <div class="community-feed" id="community-feed"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CAREER ══ -->
+    <section id="page-career" class="page">
+      <div class="page-header">
+        <h1 class="page-title">Career Insights</h1>
+        <p class="page-sub">Explore future-proof careers, salaries, and required skills.</p>
+      </div>
+      <div class="career-grid" id="career-grid"></div>
+    </section>
+
+  </main>
 </div>
 
 <!-- AI FAB -->
@@ -329,42 +314,33 @@
 <!-- AI Modal -->
 <div id="ai-modal" class="modal-overlay hidden">
   <div class="modal-box">
-    <div class="modal-header">
+    <div class="modal-hdr">
       <h3>AI Course Recommender</h3>
       <button class="modal-close" onclick="closeAiModal()">&#x2715;</button>
     </div>
-    <p class="modal-desc">Tell us about yourself and we'll recommend a personalised learning path.</p>
-    <div class="ai-form">
-      <div class="field-group">
-        <label>Your interest area</label>
-        <select id="ai-interest">
-          <option>Web Development</option>
-          <option>Artificial Intelligence</option>
-          <option>Cybersecurity</option>
-          <option>Data Science</option>
-          <option>Web3</option>
-          <option>DevOps</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Available time per day</label>
-        <select id="ai-time">
-          <option value="30">30 minutes</option>
-          <option value="60">1 hour</option>
-          <option value="120">2 hours</option>
-          <option value="180">3+ hours</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Current skill level</label>
-        <select id="ai-level">
-          <option>Beginner</option>
-          <option>Intermediate</option>
-          <option>Advanced</option>
-        </select>
-      </div>
-      <button class="btn-primary full" onclick="getAiRecommendation()">Get recommendation</button>
+    <p class="modal-desc">Tell us about yourself and we'll suggest a path.</p>
+    <div class="field-group">
+      <label>Interest area</label>
+      <select id="ai-interest">
+        <option>Web Development</option><option>Artificial Intelligence</option>
+        <option>Cybersecurity</option><option>Data Science</option>
+        <option>Web3</option><option>DevOps</option>
+      </select>
     </div>
+    <div class="field-group">
+      <label>Time per day</label>
+      <select id="ai-time">
+        <option value="30">30 minutes</option><option value="60">1 hour</option>
+        <option value="120">2 hours</option><option value="180">3+ hours</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Skill level</label>
+      <select id="ai-level">
+        <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+      </select>
+    </div>
+    <button class="btn-primary full" onclick="getAiRecommendation()">Get recommendation</button>
     <div id="ai-result" class="ai-result hidden"></div>
   </div>
 </div>

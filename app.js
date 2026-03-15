@@ -11,37 +11,43 @@ const DOMAINS = [
     id: "webdev", name: "Web Development",
     desc: "Build full-stack web apps from HTML to React & Node.js.",
     tags: ["Trending", "Beginner Friendly"],
-    accent: "var(--accent2)"
+    accent: "#ff008a",
+    cardGrad: "linear-gradient(135deg, #ffe0f4 0%, #f0e0ff 100%)"
   },
   {
     id: "ai", name: "Artificial Intelligence",
     desc: "Machine learning, deep learning, NLP, and AI engineering.",
     tags: ["Trending", "High Demand"],
-    accent: "var(--accent)"
+    accent: "#00b8d4",
+    cardGrad: "linear-gradient(135deg, #d0faff 0%, #e0eeff 100%)"
   },
   {
     id: "cybersec", name: "Cybersecurity",
     desc: "Ethical hacking, network defense, SOC analyst path.",
     tags: ["Growing Fast"],
-    accent: "var(--green)"
+    accent: "#00b87a",
+    cardGrad: "linear-gradient(135deg, #d0fff0 0%, #d0faff 100%)"
   },
   {
     id: "datascience", name: "Data Science",
     desc: "Statistics, Python, pandas, visualization & ML pipelines.",
     tags: ["Trending", "High Pay"],
-    accent: "var(--accent)"
+    accent: "#e6a800",
+    cardGrad: "linear-gradient(135deg, #fff8d0 0%, #ffe8d0 100%)"
   },
   {
     id: "web3", name: "Web3 / Blockchain",
     desc: "Smart contracts, DeFi, Solidity, and decentralized apps.",
     tags: ["Emerging"],
-    accent: "#9b8eff"
+    accent: "#6c00ff",
+    cardGrad: "linear-gradient(135deg, #ede0ff 0%, #ffe0f4 100%)"
   },
   {
     id: "devops", name: "DevOps & Cloud",
     desc: "CI/CD, Docker, Kubernetes, AWS, and infrastructure as code.",
     tags: ["High Demand"],
-    accent: "var(--accent2)"
+    accent: "#ff5c00",
+    cardGrad: "linear-gradient(135deg, #ffe8d8 0%, #fff8d0 100%)"
   }
 ];
 
@@ -127,12 +133,12 @@ const ROADMAPS = {
 };
 
 const CAREER_DATA = [
-  { icon:"🤖", name:"AI / ML Engineer",        demand:"Very High", demandClass:"demand-high", salary:"$120k – $180k/yr", skills:["Python","TensorFlow","PyTorch","MLOps","SQL","Statistics"],               accent:"linear-gradient(90deg,#ff6b6b,#ffd700)" },
-  { icon:"🔐", name:"Cybersecurity Analyst",    demand:"High",      demandClass:"demand-high", salary:"$90k – $140k/yr",  skills:["Kali Linux","Wireshark","SIEM","OWASP","Scripting","Networking"],         accent:"linear-gradient(90deg,#00e676,#00d4ff)" },
-  { icon:"⛓️", name:"Web3 Developer",           demand:"Growing",   demandClass:"demand-med",  salary:"$110k – $170k/yr", skills:["Solidity","Ethers.js","Rust","DeFi","Smart Contracts","Web3.js"],          accent:"linear-gradient(90deg,#8b5cf6,#6c63ff)" },
-  { icon:"🌐", name:"Full-Stack Developer",      demand:"Very High", demandClass:"demand-high", salary:"$80k – $140k/yr",  skills:["React","Node.js","PostgreSQL","REST APIs","TypeScript","Docker"],           accent:"linear-gradient(90deg,#6c63ff,#00d4ff)" },
-  { icon:"📊", name:"Data Scientist",            demand:"High",      demandClass:"demand-high", salary:"$100k – $160k/yr", skills:["Python","R","Pandas","Scikit-learn","SQL","Tableau"],                       accent:"linear-gradient(90deg,#ffd700,#ff6b6b)" },
-  { icon:"☁️", name:"DevOps / Cloud Engineer",  demand:"Very High", demandClass:"demand-high", salary:"$95k – $155k/yr",  skills:["Kubernetes","Terraform","AWS","CI/CD","Docker","Linux"],                    accent:"linear-gradient(90deg,#00d4ff,#00e676)" },
+  { name:"AI / ML Engineer",        demand:"Very High", demandClass:"demand-high", salary:"₹18L – ₹35L/yr",  skills:["Python","TensorFlow","PyTorch","MLOps","SQL","Statistics"],    accent:"linear-gradient(135deg,#ff008a,#6c00ff)" },
+  { name:"Cybersecurity Analyst",   demand:"High",      demandClass:"demand-high", salary:"₹10L – ₹22L/yr",  skills:["Kali Linux","Wireshark","SIEM","OWASP","Scripting","Networking"], accent:"linear-gradient(135deg,#00e8ff,#6c00ff)" },
+  { name:"Web3 Developer",          demand:"Growing",   demandClass:"demand-med",  salary:"₹14L – ₹28L/yr",  skills:["Solidity","Ethers.js","Rust","DeFi","Smart Contracts","Web3.js"],  accent:"linear-gradient(135deg,#6c00ff,#ff008a)" },
+  { name:"Full-Stack Developer",    demand:"Very High", demandClass:"demand-high", salary:"₹8L – ₹20L/yr",   skills:["React","Node.js","PostgreSQL","REST APIs","TypeScript","Docker"],   accent:"linear-gradient(135deg,#ff008a,#ffe000)" },
+  { name:"Data Scientist",          demand:"High",      demandClass:"demand-high", salary:"₹12L – ₹24L/yr",  skills:["Python","R","Pandas","Scikit-learn","SQL","Tableau"],               accent:"linear-gradient(135deg,#ffe000,#ff5c00)" },
+  { name:"DevOps / Cloud Engineer", demand:"Very High", demandClass:"demand-high", salary:"₹10L – ₹22L/yr",  skills:["Kubernetes","Terraform","AWS","CI/CD","Docker","Linux"],             accent:"linear-gradient(135deg,#00e8ff,#00d98a)" },
 ];
 
 const AI_RECOMMENDATIONS = {
@@ -256,10 +262,10 @@ function populateUI() {
   const u = currentUser;
   const initial = u.username[0].toUpperCase();
 
-  // Sidebar
-  document.getElementById("sb-avatar").textContent   = initial;
-  document.getElementById("sb-username").textContent = u.username;
-  document.getElementById("sb-points").textContent   = u.points;
+  // Dots menu
+  if (document.getElementById("dots-avatar"))  document.getElementById("dots-avatar").textContent  = initial;
+  if (document.getElementById("dots-uname"))   document.getElementById("dots-uname").textContent   = u.username;
+  if (document.getElementById("dots-pts"))     document.getElementById("dots-pts").textContent     = u.points + " points";
 
   // Topbar
   document.getElementById("topbar-user").textContent   = u.username;
@@ -344,17 +350,13 @@ function renderRecommendedGrid() {
 // ─── NAVIGATION ───────────────────────────────────────────────
 function navigate(page) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.querySelectorAll(".tab-item").forEach(n => n.classList.remove("active"));
 
   const el  = document.getElementById(`page-${page}`);
   if (el)  el.classList.add("active");
 
-  const nav = document.querySelector(`[data-page="${page}"]`);
-  if (nav) nav.classList.add("active");
-
-  if (window.innerWidth <= 768) {
-    document.getElementById("sidebar").classList.remove("open");
-  }
+  const tab = document.querySelector(`.tab-item[data-page="${page}"]`);
+  if (tab) tab.classList.add("active");
 
   if (page === "domain")    loadRoadmap();
   if (page === "career")    renderCareer();
@@ -369,25 +371,26 @@ function scrollToSection(sel) {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
-// ─── SIDEBAR TOGGLE ───────────────────────────────────────────
-function toggleSidebar() {
-  document.getElementById("sidebar").classList.toggle("open");
-}
 
-// ─── THEME TOGGLE ─────────────────────────────────────────────
-function toggleTheme() {
-  const html  = document.documentElement;
-  const isDark = html.getAttribute("data-theme") === "dark";
-  html.setAttribute("data-theme", isDark ? "light" : "dark");
-  document.getElementById("theme-label").textContent = isDark ? "Dark Mode" : "Light Mode";
+
+// ─── THREE-DOT MENU ──────────────────────────────────────────
+function toggleDotsMenu() {
+  document.getElementById("dots-dropdown").classList.toggle("open");
 }
+function closeDotsMenu() {
+  document.getElementById("dots-dropdown").classList.remove("open");
+}
+// Close dots menu when clicking outside
+document.addEventListener("click", function(e) {
+  if (!e.target.closest(".dots-menu-wrap")) closeDotsMenu();
+});
 
 // ─── DOMAIN CARDS ─────────────────────────────────────────────
 function renderDomainCards() {
   const el = document.getElementById("domain-cards");
   if (!el) return;
   el.innerHTML = DOMAINS.map(d => `
-    <div class="domain-card" style="--card-accent:${d.accent}"
+    <div class="domain-card" style="--card-accent:${d.accent};--card-grad:${d.cardGrad}"
          onclick="navigate('domain');setTimeout(()=>{document.getElementById('domain-select').value='${d.id}';loadRoadmap();},120)">
       <div class="domain-card-header">
         <h3>${d.name}</h3>
@@ -493,7 +496,7 @@ function renderCareer() {
       <h3>${c.name}</h3>
       <div class="cc-demand ${c.demandClass}">${c.demand} Demand</div>
       <div class="career-salary">${c.salary}</div>
-      <div class="career-salary-label">Average salary range (US market)</div>
+      <div class="career-salary-label">Average salary range (India market)</div>
       <div class="skills-title">Required Skills</div>
       <div class="skills-list">
         ${c.skills.map(s => `<span class="skill-pill">${s}</span>`).join("")}
@@ -656,12 +659,12 @@ function showToast(msg) {
     right:      "24px",
     zIndex:     "9999",
     background: "var(--accent)",
-    color:      "#0e0f13",
+    color:      "#ffffff",
     padding:    "12px 22px",
     borderRadius:"50px",
     fontSize:   "0.88rem",
     fontWeight: "600",
-    boxShadow:  "0 4px 20px rgba(200,169,110,0.25)",
+    boxShadow:  "0 4px 20px rgba(255,60,172,0.35)",
     fontFamily: "var(--font-body)",
     animation:  "slideUp 0.3s ease",
   });
