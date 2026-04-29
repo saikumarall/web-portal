@@ -836,6 +836,14 @@ textarea { resize: vertical; }
   border: 1px solid var(--border); border-bottom-left-radius: 4px;
   align-self: flex-start;
 }
+.cb-msg h2 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin: 6px 0 4px; color: var(--pink); }
+.cb-msg h3 { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; margin: 5px 0 3px; }
+.cb-msg h4 { font-size: 0.85rem; font-weight: 700; margin: 4px 0 2px; }
+.cb-msg ul, .cb-msg ol { margin: 4px 0 6px 18px; padding-left: 4px; }
+.cb-msg li { font-size: 0.80rem; line-height: 1.5; margin-bottom: 2px; }
+.cb-msg strong { color: var(--text); font-weight: 700; }
+.cb-msg code { background: rgba(108,0,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 0.78rem; font-family: var(--font-mono); }
+.cb-msg br { display: block; margin-top: 4px; content: ""; }
 .cb-welcome { text-align: center; color: var(--text3); font-size: 0.80rem; padding: 20px 0; }
 #chatbot-input-row {
   display: flex; gap: 8px; padding: 12px;

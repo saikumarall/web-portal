@@ -687,6 +687,21 @@ function closeChatbot() {
   document.getElementById("chatbot-wrap").classList.remove("open");
 }
 
+function renderMarkdown(text) {
+  return text
+    .replace(/^### (.+)$/gm, "<h4>$1</h4>")
+    .replace(/^## (.+)$/gm, "<h3>$1</h3>")
+    .replace(/^# (.+)$/gm, "<h2>$1</h2>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/^- (.+)$/gm, "<li>$1</li>")
+    .replace(/^(\d+)\. (.+)$/gm, "<li>$2</li>")
+    .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/\n/g, "<br>");
+}
+
 function appendMsg(role, text) {
   const wrap = document.getElementById("chatbot-msgs");
   const welcome = document.getElementById("cb-welcome");
@@ -694,7 +709,7 @@ function appendMsg(role, text) {
 
   const div = document.createElement("div");
   div.className = `cb-msg ${role}`;
-  div.textContent = text;
+  div.innerHTML = renderMarkdown(text);
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
 }
@@ -706,7 +721,7 @@ function createStreamingMsg() {
 
   const div = document.createElement("div");
   div.className = "cb-msg bot";
-  div.textContent = "";
+  div.innerHTML = "";
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
   return { div, wrap };
@@ -762,7 +777,7 @@ async function sendChatMessage() {
           const reply = json?.reply;
           if (reply) {
             full += reply;
-            msgEl.textContent = full;
+            msgEl.innerHTML = renderMarkdown(full);
             wrap.scrollTop = wrap.scrollHeight;
           }
         } catch { /* skip partial JSON */ }
