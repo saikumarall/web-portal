@@ -687,22 +687,6 @@ function closeChatbot() {
   document.getElementById("chatbot-wrap").classList.remove("open");
 }
 
-function isStudyRelated(msg) {
-  const StudyTopics = [
-    "web development","html","css","javascript","react","node","express","sql","mongodb",
-    "artificial intelligence","machine learning","deep learning","nlp","llm","langchain",
-    "cybersecurity","ethical hacking","kali linux","owasp","networking","linux",
-    "data science","pandas","numpy","matplotlib","statistics","python","visualization",
-    "web3","blockchain","solidity","defi","smart contract","ethereum",
-    "devops","docker","kubernetes","cicd","github actions","terraform","aws","cloud",
-    "roadmap","course","learn","study","progress","career","salary","job","skill",
-    "frontend","backend","full stack","typescript","rest api","api","database",
-    "programming","coding","algorithm","software engineering","software development"
-  ];
-  const lower = msg.toLowerCase();
-  return StudyTopics.some(t => lower.includes(t));
-}
-
 function appendMsg(role, text) {
   const wrap = document.getElementById("chatbot-msgs");
   const welcome = document.getElementById("cb-welcome");
@@ -738,12 +722,6 @@ async function sendChatMessage() {
   appendMsg("user", `${username}: ${msg}`);
   input.value = "";
   sendBtn.disabled = true;
-
-  if (!isStudyRelated(msg)) {
-    appendMsg("bot", "I'm here to help with study-related questions! I can assist with topics like web development, AI, cybersecurity, data science, DevOps, and more. What would you like to learn about?");
-    sendBtn.disabled = false;
-    return;
-  }
 
   try {
     const res = await fetch(CHAT_API, {
