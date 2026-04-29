@@ -58,14 +58,30 @@ CAREER INSIGHTS (India market):
 
 YOUR ROLE: Help only with study and learning questions. Firmly redirect anything else. Use markdown formatting for readable answers.`;
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+exports.handler = async function (req, res) {
+  if (req.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
   }
 
-  const { message } = req.body;
+  let message;
+  try {
+    const body = JSON.parse(req.body);
+    message = body.message;
+  } catch (e) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Invalid JSON body" }),
+    };
+  }
+
   if (!message) {
-    return res.status(400).json({ error: "message is required" });
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "message is required" }),
+    };
   }
 
   try {
@@ -83,30 +99,28 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: SYSTEM_PROMPT
+            content: SYSTEM_PROMPT,
           },
           {
             role: "user",
-            content: message
-          }
+            content: message,
+          },
         ],
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      return res.status(response.status).json({ error: `API error: ${response.status}`, detail: errorText });
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ error: `API error: ${response.status}`, detail: errorText }),
+      };
     }
-
-    res.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive",
-    });
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
+    let fullReply = "";
 
     while (true) {
       const { done, value } = await reader.read();
@@ -123,19 +137,23 @@ export default async function handler(req, res) {
           try {
             const parsed = JSON.parse(data);
             if (parsed.type === "content_block_delta" && parsed.delta?.type === "text_delta") {
-              res.write(`data: ${JSON.stringify({ reply: parsed.delta.text })}\n\n`);
+              fullReply += parsed.delta.text;
             }
           } catch (e) {
-            // Ignore parse errors for non-JSON lines
+            // Ignore parse errors
           }
         }
       }
     }
 
-    res.write("data: [DONE]\n\n");
-    res.end();
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ reply: fullReply }),
+    };
   } catch (err) {
-    res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: err.message }));
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message }),
+    };
   }
-}
+};

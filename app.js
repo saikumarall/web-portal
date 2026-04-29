@@ -747,46 +747,61 @@ async function sendChatMessage() {
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const { div: msgEl, wrap } = createStreamingMsg();
-    let full = "";
+    // Check if response body is readable (SSE stream) or plain JSON
+    const contentType = res.headers.get("content-type") || "";
 
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let lineBuf = "";
+    if (res.body && typeof res.body.getReader === "function" && contentType.includes("text/event-stream")) {
+      // SSE streaming response
+      const { div: msgEl, wrap } = createStreamingMsg();
+      let full = "";
 
-    const readChunk = ({ value, done }) => {
-      if (done) {
-        sendBtn.disabled = false;
-        return;
-      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let lineBuf = "";
 
-      const chunk = decoder.decode(value, { stream: true });
-      lineBuf += chunk;
+      const readChunk = ({ value, done }) => {
+        if (done) {
+          sendBtn.disabled = false;
+          return;
+        }
 
-      const lines = lineBuf.split("\n");
-      lineBuf = lines.pop() || "";
+        const chunk = decoder.decode(value, { stream: true });
+        lineBuf += chunk;
 
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed.startsWith("data: ")) continue;
-        const data = trimmed.slice(6).trim();
-        if (!data) continue;
+        const lines = lineBuf.split("\n");
+        lineBuf = lines.pop() || "";
 
-        try {
-          const json = JSON.parse(data);
-          const reply = json?.reply;
-          if (reply) {
-            full += reply;
-            msgEl.innerHTML = renderMarkdown(full);
-            wrap.scrollTop = wrap.scrollHeight;
-          }
-        } catch { /* skip partial JSON */ }
-      }
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("data: ")) continue;
+          const data = trimmed.slice(6).trim();
+          if (!data) continue;
+
+          try {
+            const json = JSON.parse(data);
+            const reply = json?.reply;
+            if (reply) {
+              full += reply;
+              msgEl.innerHTML = renderMarkdown(full);
+              wrap.scrollTop = wrap.scrollHeight;
+            }
+          } catch { /* skip partial JSON */ }
+        }
+
+        reader.read().then(readChunk);
+      };
 
       reader.read().then(readChunk);
-    };
-
-    reader.read().then(readChunk);
+    } else {
+      // Plain JSON response (Netlify non-streaming)
+      const data = await res.json();
+      if (data.reply) {
+        appendMsg("bot", data.reply);
+      } else if (data.error) {
+        appendMsg("bot", `Error: ${data.error}`);
+      }
+      sendBtn.disabled = false;
+    }
   } catch (err) {
     appendMsg("bot", `Sorry, something went wrong (${err.message}). Please try again.`);
     sendBtn.disabled = false;
