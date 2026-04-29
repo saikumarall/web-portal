@@ -58,8 +58,8 @@ CAREER INSIGHTS (India market):
 
 YOUR ROLE: Help only with study and learning questions. Firmly redirect anything else. Use markdown formatting for readable answers.`;
 
-exports.handler = async function (req, res) {
-  if (req.httpMethod !== "POST") {
+export const handler = async function (event) {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: "Method not allowed" }),
@@ -68,7 +68,7 @@ exports.handler = async function (req, res) {
 
   let message;
   try {
-    const body = JSON.parse(req.body);
+    const body = JSON.parse(event.body);
     message = body.message;
   } catch (e) {
     return {
