@@ -125,6 +125,20 @@ Uses Anthropic SDK (`@anthropic-ai/sdk`) with:
 - `max_tokens: 500`
 - API key hardcoded (expires in ~5 days from project creation)
 
+### Chatbot Rules (STRICT — enforced in both server.js and api/chat.js system prompt)
+
+**RULE 1 — TOPIC RESTRICTION:**
+ONLY discuss: study/learning topics, SkillPath domains, programming, tech, courses, career advice, SkillPath features.
+**REFUSE all off-topic questions** including: sports, music, movies, politics, news, casual greetings ("hi", "how are you").
+
+**RULE 2 — NO ROMANTIC/PERSONAL MESSAGES:**
+If user says "I love you", "darling", "sweetheart", "babe", "I like you", or any similar message, respond with:
+> "Thank you for your feelings, but I'm an AI study assistant! My only purpose is to help you learn and grow. Let's focus on your studies — what would you like to learn today?"
+Then immediately redirect to study topics.
+
+**RULE 3 — REDIRECTION:**
+When off-topic, be firm but kind: "I'm here to help with study-related questions! Ask me about learning paths, courses, or tech topics."
+
 ### Frontend (`app.js` `sendChatMessage()`)
 - `fetch(CHAT_API, { stream: true })`
 - Recursive promise pattern: reads chunks, decodes SSE, parses `{"reply": "text"}`, accumulates into `msgEl.innerHTML`
