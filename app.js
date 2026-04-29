@@ -674,8 +674,135 @@ function showToast(msg) {
 }
 
 // ─── KEYBOARD SHORTCUTS ──────────────────────────────────────
+// ─── CHATBOT ────────────────────────────────────────────────
+const CHAT_API = "/api/chat";
+
+function openChatbot() {
+  document.getElementById("chatbot-wrap").classList.add("open");
+  const welcome = document.getElementById("cb-welcome");
+  if (welcome) welcome.style.display = "";
+}
+
+function closeChatbot() {
+  document.getElementById("chatbot-wrap").classList.remove("open");
+}
+
+function isStudyRelated(msg) {
+  const StudyTopics = [
+    "web development","html","css","javascript","react","node","express","sql","mongodb",
+    "artificial intelligence","machine learning","deep learning","nlp","llm","langchain",
+    "cybersecurity","ethical hacking","kali linux","owasp","networking","linux",
+    "data science","pandas","numpy","matplotlib","statistics","python","visualization",
+    "web3","blockchain","solidity","defi","smart contract","ethereum",
+    "devops","docker","kubernetes","cicd","github actions","terraform","aws","cloud",
+    "roadmap","course","learn","study","progress","career","salary","job","skill",
+    "frontend","backend","full stack","typescript","rest api","api","database",
+    "programming","coding","algorithm","software engineering","software development"
+  ];
+  const lower = msg.toLowerCase();
+  return StudyTopics.some(t => lower.includes(t));
+}
+
+function appendMsg(role, text) {
+  const wrap = document.getElementById("chatbot-msgs");
+  const welcome = document.getElementById("cb-welcome");
+  if (welcome) welcome.style.display = "none";
+
+  const div = document.createElement("div");
+  div.className = `cb-msg ${role}`;
+  div.textContent = text;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function createStreamingMsg() {
+  const wrap = document.getElementById("chatbot-msgs");
+  const welcome = document.getElementById("cb-welcome");
+  if (welcome) welcome.style.display = "none";
+
+  const div = document.createElement("div");
+  div.className = "cb-msg bot";
+  div.textContent = "";
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return { div, wrap };
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById("chatbot-input");
+  const sendBtn = document.getElementById("chatbot-send");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const username = currentUser ? currentUser.username : "Learner";
+  appendMsg("user", `${username}: ${msg}`);
+  input.value = "";
+  sendBtn.disabled = true;
+
+  if (!isStudyRelated(msg)) {
+    appendMsg("bot", "I'm here to help with study-related questions! I can assist with topics like web development, AI, cybersecurity, data science, DevOps, and more. What would you like to learn about?");
+    sendBtn.disabled = false;
+    return;
+  }
+
+  try {
+    const res = await fetch(CHAT_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const { div: msgEl, wrap } = createStreamingMsg();
+    let full = "";
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let lineBuf = "";
+
+    const readChunk = ({ value, done }) => {
+      if (done) {
+        sendBtn.disabled = false;
+        return;
+      }
+
+      const chunk = decoder.decode(value, { stream: true });
+      lineBuf += chunk;
+
+      const lines = lineBuf.split("\n");
+      lineBuf = lines.pop() || "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith("data: ")) continue;
+        const data = trimmed.slice(6).trim();
+        if (!data) continue;
+
+        try {
+          const json = JSON.parse(data);
+          const reply = json?.reply;
+          if (reply) {
+            full += reply;
+            msgEl.textContent = full;
+            wrap.scrollTop = wrap.scrollHeight;
+          }
+        } catch { /* skip partial JSON */ }
+      }
+
+      reader.read().then(readChunk);
+    };
+
+    reader.read().then(readChunk);
+  } catch (err) {
+    appendMsg("bot", `Sorry, something went wrong (${err.message}). Please try again.`);
+    sendBtn.disabled = false;
+  }
+}
+
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
+    closeChatbot();
     closeAiModal();
     document.getElementById("search-results").classList.add("hidden");
   }

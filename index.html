@@ -341,7 +341,23 @@
       </select>
     </div>
     <button class="btn-primary full" onclick="getAiRecommendation()">Get recommendation</button>
+    <button class="btn-primary full" style="background:var(--g-cool);margin-top:8px" onclick="openChatbot()">Open Study Chatbot</button>
     <div id="ai-result" class="ai-result hidden"></div>
+  </div>
+</div>
+
+<!-- Chatbot -->
+<div id="chatbot-wrap">
+  <div id="chatbot-header">
+    <h4>Study Chatbot</h4>
+    <button id="chatbot-close" onclick="closeChatbot()">&#x2715;</button>
+  </div>
+  <div id="chatbot-msgs">
+    <div class="cb-welcome" id="cb-welcome">Ask me anything about your studies!</div>
+  </div>
+  <div id="chatbot-input-row">
+    <input type="text" id="chatbot-input" placeholder="Ask a study question..." onkeydown="if(event.key==='Enter')sendChatMessage()" />
+    <button id="chatbot-send" onclick="sendChatMessage()">Send</button>
   </div>
 </div>
 
